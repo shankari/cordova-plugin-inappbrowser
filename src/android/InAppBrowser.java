@@ -922,22 +922,9 @@ public class InAppBrowser extends CordovaPlugin {
                 if (!hideNavigationButtons) toolbar.addView(actionButtonContainer);
                 if (!hideUrlBar) toolbar.addView(edittext);
 
-                //CB-6229, option to independently show/hide the URL & back/forward/close buttons in the toolbar
-                if (getShowLocationBar() && getShowToolBar()) {
-                    toolbar.addView(edittext);
-                    actionButtonContainer.addView(back);
-                    actionButtonContainer.addView(forward);
-                    toolbar.addView(close);
-                    main.addView(toolbar);
-                }
-                else if (getShowLocationBar() && !getShowToolBar()){
-                    toolbar.addView(edittext);
-                    main.addView(toolbar);
-                }
-                else if(!getShowLocationBar() && getShowToolBar()) {
-                    actionButtonContainer.addView(back);
-                    actionButtonContainer.addView(forward);
-                    toolbar.addView(close);
+                // Don't add the toolbar if its been disabled
+                if (getShowLocationBar()) {
+                    // Add our toolbar to our main view/layout
                     main.addView(toolbar);
                 }
 
