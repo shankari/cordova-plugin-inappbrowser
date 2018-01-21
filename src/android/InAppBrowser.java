@@ -85,7 +85,6 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String SYSTEM = "_system";
     private static final String EXIT_EVENT = "exit";
     private static final String LOCATION = "location";
-    private static final String MTOOLBAR ="toolbar";
     private static final String ZOOM = "zoom";
     private static final String HIDDEN = "hidden";
     private static final String LOAD_START_EVENT = "loadstart";
@@ -112,7 +111,6 @@ public class InAppBrowser extends CordovaPlugin {
     private EditText edittext;
     private CallbackContext callbackContext;
     private boolean showLocationBar = true;
-    private boolean showToolBar = true;
     private boolean showZoomControls = true;
     private boolean openWindowHidden = false;
     private boolean clearAllCache = false;
@@ -544,17 +542,6 @@ public class InAppBrowser extends CordovaPlugin {
         return this;
     }
 
-
-    /**
-     * Should we show the tool bar?
-     *
-     * @return boolean
-     */
-    private boolean getShowToolBar() {
-        return this.showToolBar;
-    }
-
-
     /**
      * Display a new browser with the specified URL.
      *
@@ -564,7 +551,6 @@ public class InAppBrowser extends CordovaPlugin {
     public String showWebPage(final String url, HashMap<String, String> features) {
         // Determine if we should hide the location bar.
         showLocationBar = true;
-        showToolBar = true;
         showZoomControls = true;
         openWindowHidden = false;
         mediaPlaybackRequiresUserGesture = false;
@@ -922,22 +908,9 @@ public class InAppBrowser extends CordovaPlugin {
                 if (!hideNavigationButtons) toolbar.addView(actionButtonContainer);
                 if (!hideUrlBar) toolbar.addView(edittext);
 
-                //CB-6229, option to independently show/hide the URL & back/forward/close buttons in the toolbar
-                if (getShowLocationBar() && getShowToolBar()) {
-                    toolbar.addView(edittext);
-                    actionButtonContainer.addView(back);
-                    actionButtonContainer.addView(forward);
-                    toolbar.addView(close);
-                    main.addView(toolbar);
-                }
-                else if (getShowLocationBar() && !getShowToolBar()){
-                    toolbar.addView(edittext);
-                    main.addView(toolbar);
-                }
-                else if(!getShowLocationBar() && getShowToolBar()) {
-                    actionButtonContainer.addView(back);
-                    actionButtonContainer.addView(forward);
-                    toolbar.addView(close);
+                // Don't add the toolbar if its been disabled
+                if (getShowLocationBar()) {
+                    // Add our toolbar to our main view/layout
                     main.addView(toolbar);
                 }
 
